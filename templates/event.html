@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>tracking</title>
+</head>
+<body>
+
+    {% for event in events %}
+    <div class="event {{ 'finished' if event['title']=='доставена' else '' }}">
+        <p class="date">
+            {{ event['timestamp'] }}
+        </p>
+        <h2>
+            {{ event['title'] }}
+        </h2>
+        <h3>
+            {{ event['description'] }}
+        </h3>
+    </div>
+    {% endfor %}
+
+    <style>
+        .event {
+            background: rgb(190, 183, 255);
+            margin-bottom: 20px;
+            margin: 0 auto;
+            width: 400px;
+            text-align: center;
+            font-family: sans-serif;
+            border-radius: 8px;
+            padding: 5px;
+            margin-bottom: 15px;
+
+        }
+
+        .event.finished {
+            background: rgb(94, 221, 94);
+        }
+
+        .event.finished h2::before {
+            content: "✓";
+        }
+
+
+        .date {
+            font-size: 17px;
+        }
+
+        h2 {
+            font-size: 25px;
+        }
+        .event h3 {
+            font-weight: 300;
+            font-size: 20px;
+        }
+    </style>
+
+</body>
+</html>
