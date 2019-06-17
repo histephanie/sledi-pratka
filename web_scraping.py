@@ -14,13 +14,21 @@ def home():
 @app.route("/track/<tracking_number>")
 def get_tracking_info(tracking_number):
     url = "http://mk.brzapratka.com/public/tracking.php/?submit=true"
-    response = requests.post(url, data={'bCode': tracking_number, 'Submit': 'Внеси'})
+    try:
+        response = requests.post(url, data={'bCode': tracking_number, 'Submit': 'Внеси'}, timeout=5)
+    except:
+        error_msg = "Сервисот на Брза Пратка во моментов не функционира. Ве молиме обидете се повторно."
+        return render_template('event.html', events=[], error_msg=error_msg)
     soup = BeautifulSoup(response.text, "html.parser")
-
     events = []
     trs = soup.findAll('tr')
+    if trs == []:
+        error_msg = "Невалиден број на товарителница."
+        return render_template('event.html', events=[], error_msg=error_msg)
     for tr in trs:
         tds = tr.findAll('td')
+        # ignores trs that dont contain tds
+        # such as the table header
         if tds == []:
             continue
 

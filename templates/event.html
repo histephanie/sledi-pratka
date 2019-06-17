@@ -22,18 +22,24 @@
     </div>
     {% endfor %}
 
+    {% if events == [] %}
+    <div class="event error">
+        {{ error_msg }}
+    </div>
+    {% endif %}
+
     <style>
         .event {
             background: rgb(190, 183, 255);
             margin-bottom: 20px;
             margin: 0 auto;
-            width: 400px;
+            width: 90%;
             text-align: center;
             font-family: sans-serif;
             border-radius: 8px;
             padding: 5px;
             margin-bottom: 15px;
-
+            max-width: 400px;
         }
 
         .event.finished {
@@ -44,7 +50,9 @@
             content: "✓";
         }
 
-
+        .event.error {
+            background: yellow;
+        }
         .date {
             font-size: 17px;
         }
@@ -55,6 +63,9 @@
         .event h3 {
             font-weight: 300;
             font-size: 20px;
+        }
+        body {
+            padding-top: 20px;
         }
     </style>
 
