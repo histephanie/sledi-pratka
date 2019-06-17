@@ -7,10 +7,6 @@ import requests
 
 app=Flask(__name__) #creates the app
 
-@app.route("/", methods=['GET'])
-def home():
-    return 'hello'
-
 @app.route("/track/<tracking_number>")
 def get_tracking_info(tracking_number):
     url = "http://mk.brzapratka.com/public/tracking.php/?submit=true"
@@ -39,10 +35,10 @@ def get_tracking_info(tracking_number):
         event = {"timestamp":timestamp, "title":title, "description":description}
         events.append(event)
 
+    # brza pratka lists events in chronological order
+    # but we want to show the last event first
     events.reverse()
 
-
-    print(events)
     return render_template('event.html', events=events)
 
 
