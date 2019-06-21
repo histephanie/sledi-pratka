@@ -2,8 +2,16 @@ import urllib.request
 import time
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, request, jsonify
+import flask
 import os
 import requests
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+from validate_email import validate_email
+from dotenv import load_dotenv
+
+# Load secrets and configuration from the .env file
+load_dotenv()
 
 app=Flask(__name__) #creates the app
 
@@ -40,6 +48,53 @@ def get_tracking_info(tracking_number):
     events.reverse()
 
     return render_template('event.html', events=events)
+
+@app.route("/contact", methods=['GET', 'POST'])
+def contact():
+    msg_sent = False
+
+    if request.method == 'POST':
+        email = flask.request.values.get('email')
+        name = flask.request.values.get('name')
+        message = flask.request.values.get('text')
+
+        error_msgs = []
+        if email == '':
+            error_msgs.append("email is required")
+        elif not validate_email(email):
+            error_msgs.append("Invalid email")
+        if name == '':
+            error_msgs.append("Name is required")
+        if message == '':
+            error_msgs.append("Please enter a message")
+
+        if len(error_msgs) > 0:
+            return render_template("contact.html", error_msgs=error_msgs, name=name, email=email, message=message)
+
+
+        message = Mail(
+            from_email=email,
+            to_emails='stephanie.bogantes@gmail.com',
+            subject='New Message',
+            html_content=message)
+        try:
+            sg = SendGridAPIClient(os.getenv('SENDGRID_API_KEY'))
+            response = sg.send(message)
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+            print("temporary")
+        except Exception as e:
+            print(e)
+
+        msg_sent = True
+
+
+    return render_template('contact.html', msg_sent=msg_sent)
+
+@app.route("/privacy")
+def privacy():
+    return render_template('privacy.html')
 
 
 # Start a development server if the file is executed directly
