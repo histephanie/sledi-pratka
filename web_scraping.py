@@ -80,10 +80,7 @@ def contact():
         try:
             sg = SendGridAPIClient(os.getenv('SENDGRID_API_KEY'))
             response = sg.send(message)
-            print(response.status_code)
-            print(response.body)
-            print(response.headers)
-            print("temporary")
+
         except Exception as e:
             print(e)
 
