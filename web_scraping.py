@@ -1,7 +1,7 @@
 import urllib.request
 import time
 from bs4 import BeautifulSoup
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request
 import flask
 import os
 import requests
