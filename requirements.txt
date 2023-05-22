@@ -1,6 +1,6 @@
 beautifulsoup4==4.7.1
 Flask==1.0.2
-requests==2.21.0
+requests==2.31.0
 sendgrid==6.0.5
 python-dotenv==0.10.3
 validate-email==1.3
